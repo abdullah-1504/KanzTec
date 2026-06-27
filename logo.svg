@@ -1,0 +1,12 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KanzTech">
+  <defs>
+    <linearGradient id="kt-gold" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4d06a"/>
+      <stop offset="0.5" stop-color="#e7b033"/>
+      <stop offset="1" stop-color="#c8941b"/>
+    </linearGradient>
+  </defs>
+  <rect x="6.5" y="6.5" width="51" height="51" rx="14" stroke="url(#kt-gold)" stroke-width="3.4"/>
+  <path d="M21 18 V33 Q21 36 24 36 H34" stroke="url(#kt-gold)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M43 46 V31 Q43 28 40 28 H30" stroke="url(#kt-gold)" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
