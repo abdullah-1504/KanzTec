@@ -142,11 +142,11 @@ a { color: inherit; text-decoration: none; }
 
 /* ===== Strip ===== */
 .strip { border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); background: var(--bg-2); }
-.strip__inner { display: grid; grid-template-columns: repeat(3, 1fr); }
-.stat { padding: 40px 24px; text-align: center; border-left: 1px solid var(--line-soft); }
+.strip__inner { display: grid; grid-template-columns: repeat(5, 1fr); }
+.stat { padding: 46px 18px; text-align: center; border-left: 1px solid var(--line-soft); }
 .stat:first-child { border-left: 0; }
-.stat__num { display: block; font-size: 1.5rem; font-weight: 600; color: var(--gold-soft); }
-.stat__label { font-size: .9rem; color: var(--text-mute); margin-top: 4px; }
+.stat__num { display: block; font-size: clamp(1.9rem, 3vw, 2.4rem); font-weight: 700; color: var(--gold-soft); letter-spacing: -0.01em; line-height: 1; }
+.stat__label { font-size: .85rem; color: var(--text-mute); margin-top: 10px; }
 
 /* ===== Sections ===== */
 .section { padding: 108px 0; position: relative; }
@@ -263,6 +263,9 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 940px) {
   .grid--3, .products { grid-template-columns: repeat(2, 1fr); }
   .grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .strip__inner { grid-template-columns: repeat(3, 1fr); }
+  .stat { border-left: 0; }
+  .stat:nth-child(n+4) { border-top: 1px solid var(--line-soft); }
 }
 @media (max-width: 760px) {
   .nav__links {
@@ -276,14 +279,14 @@ a { color: inherit; text-decoration: none; }
   .nav__links a { padding: 11px 0; width: 100%; }
   .nav__cta { width: 100%; text-align: center; margin-top: 6px; }
   .nav__toggle { display: flex; }
-  .strip__inner { grid-template-columns: 1fr; }
-  .stat { border-left: 0; border-top: 1px solid var(--line-soft); }
-  .stat:first-child { border-top: 0; }
 }
 @media (max-width: 560px) {
   .grid--3, .grid--4, .products { grid-template-columns: 1fr; }
   .hero { padding: 64px 0 60px; }
   .section { padding: 80px 0; }
+  .strip__inner { grid-template-columns: repeat(2, 1fr); }
+  .stat { padding: 32px 12px; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--line-soft); }
 }
 
 @media (prefers-reduced-motion: reduce) {
