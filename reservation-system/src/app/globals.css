@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #faf8f5;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  /* Subtle warm texture so the cream background feels intentional, not flat. */
+  background-image: radial-gradient(circle at 100% 0%, rgba(249, 115, 22, 0.05), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(249, 115, 22, 0.04), transparent 35%);
+  background-attachment: fixed;
+  color: #1c1917;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin, neutral scrollbars for dashboard panels and chat */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #d6d3d1;
+  border-radius: 9999px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  /* Shared white surface used across cards and panels */
+  .panel {
+    @apply rounded-3xl border border-stone-200/80 bg-white shadow-card;
+  }
+  /* Friendly focus ring for keyboard users */
+  .focusable {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2;
+  }
+}
