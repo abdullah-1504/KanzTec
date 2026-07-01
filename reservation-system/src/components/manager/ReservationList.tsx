@@ -5,7 +5,7 @@ import type { BookingSource, Reservation, ReservationStatus, RestaurantTable } f
 import { updateReservationStatus } from '@/lib/store';
 import { formatDateTimeLabel } from '@/lib/helpers/datetime';
 import { formatMoney } from '@/lib/helpers/pricing';
-import { normalizePhone } from '@/lib/helpers/guests';
+import { phoneDigits } from '@/lib/helpers/guests';
 import { Badge, Button, EmptyState, Input } from '@/components/ui';
 import { clsx } from '@/lib/helpers/clsx';
 
@@ -43,14 +43,14 @@ export function ReservationList({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const qPhone = normalizePhone(query);
+    const qPhone = phoneDigits(query);
     return reservations
       .filter((r) => (statusFilter === 'all' ? true : r.status === statusFilter))
       .filter((r) => {
         if (!q) return true;
         return (
           r.customerName.toLowerCase().includes(q) ||
-          normalizePhone(r.phone).includes(qPhone) ||
+          (qPhone !== '' && phoneDigits(r.phone).includes(qPhone)) ||
           String(tableNumber(r.tableId)).includes(q)
         );
       })
@@ -144,4 +144,4 @@ export function ReservationList({
       )}
     </div>
   );
-}
+}

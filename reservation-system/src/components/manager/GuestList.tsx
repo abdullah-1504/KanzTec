@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { Guest } from '@/lib/types';
-import { normalizePhone } from '@/lib/helpers/guests';
+import { phoneDigits } from '@/lib/helpers/guests';
 import { formatMoney } from '@/lib/helpers/pricing';
 import { Badge, EmptyState, Input } from '@/components/ui';
 import { GuestTags } from '@/components/manager/GuestTags';
@@ -20,13 +20,13 @@ export function GuestList({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const qPhone = normalizePhone(query);
+    const qPhone = phoneDigits(query);
     return [...guests]
       .filter(
         (g) =>
           !q ||
           g.name.toLowerCase().includes(q) ||
-          normalizePhone(g.phone).includes(qPhone),
+          (qPhone !== '' && phoneDigits(g.phone).includes(qPhone)),
       )
       .sort((a, b) => b.totalSpend - a.totalSpend);
   }, [guests, query]);
@@ -82,4 +82,4 @@ function Stat({ label, value }: { label: string; value: string }) {
       <p className="text-[11px] text-stone-400">{label}</p>
     </div>
   );
-}
+}

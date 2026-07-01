@@ -6,14 +6,32 @@ import { todayStr, toDateStr, nowTimeStr, toTimeStr } from '@/lib/helpers/dateti
 // touching the conversation handler.
 // =============================================================================
 
+// Spelled-out party sizes. NOTE: "a"/"an" are deliberately NOT here — treating
+// "a table" as 2 guests was a major misdetection source. "couple"/"few" only
+// count when they clearly describe the party (handled below), not in passing.
 const NUMBER_WORDS: Record<string, number> = {
   one: 1, two: 2, three: 3, four: 4, five: 5, six: 6,
-  seven: 7, eight: 8, nine: 9, ten: 10, a: 2, couple: 2,
+  seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12,
 };
 
 /** Extract a party size from text like "table for 4", "four people", "6". */
 export function parsePartySize(text: string): number | null {
   const t = text.toLowerCase();
+
+  // A number tied to party wording is the strongest signal: "for 4",
+  // "party of 6", "table of 2", "5 people/guests/pax/adults/persons".
+  const contextual = t.match(
+    /\b(?:for|of|party of|table of|group of)\s+(\d{1,2})\b/,
+  ) || t.match(/\b(\d{1,2})\s*(?:people|persons?|guests?|pax|adults?|heads?|of us)\b/);
+  if (contextual) {
+    const n = parseInt(contextual[1], 10);
+    if (n >= 1 && n <= 30) return n;
+  }
+
+  // "couple" / "a couple" → 2, "a few" → 3 (only as standalone party descriptors).
+  if (/\b(?:a\s+)?couple\b/.test(t)) return 2;
+  if (/\ba few\b/.test(t)) return 3;
+
   const digit = t.match(/\b(\d{1,2})\b/);
   if (digit) {
     const n = parseInt(digit[1], 10);
@@ -132,4 +150,4 @@ export function isAffirmative(text: string): boolean {
 
 export function isNegative(text: string): boolean {
   return /\b(no|nope|nah|skip|n|cancel)\b/i.test(text.trim());
-}
+}

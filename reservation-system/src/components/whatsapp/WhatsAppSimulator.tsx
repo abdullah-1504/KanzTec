@@ -72,7 +72,7 @@ export function WhatsAppSimulator() {
   };
 
   return (
-    <div className="mx-auto flex h-[640px] max-w-md flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-lift">
+    <div className="mx-auto flex h-[640px] max-h-[80dvh] w-full max-w-md flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-lift">
       {/* Header */}
       <div className="flex items-center gap-3 bg-emerald-600 px-4 py-3 text-white">
         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-lg">💬</span>
@@ -149,11 +149,15 @@ export function WhatsAppSimulator() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Type a message…"
-          className="flex-1 rounded-full border border-stone-200 px-4 py-2 text-sm focus:border-emerald-400 focus:outline-none"
+          inputMode="text"
+          enterKeyHint="send"
+          autoComplete="off"
+          // 16px text keeps iOS Safari from zooming the whole page on focus.
+          className="min-w-0 flex-1 rounded-full border border-stone-200 px-4 py-2 text-[16px] focus:border-emerald-400 focus:outline-none"
         />
         <button
           type="submit"
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-white"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white"
           aria-label="Send"
         >
           ➤
@@ -161,4 +165,4 @@ export function WhatsAppSimulator() {
       </form>
     </div>
   );
-}
+}

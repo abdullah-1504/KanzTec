@@ -120,6 +120,16 @@ export function agentReply(
   const t = text.trim();
   const branding = ctx.settings.branding;
 
+  // A finished booking is done. Any further message starts a BRAND-NEW booking
+  // (keeping who we're chatting with) instead of re-confirming stale slots — so
+  // the same thread can book again without getting stuck on the old reservation.
+  if (prevState.step === 'done') {
+    const fresh = initialAgentState(state.phone);
+    fresh.greeted = true; // already mid-chat — no need to re-welcome
+    fresh.name = state.name; // remember the guest's name across bookings
+    return agentReply(fresh, text, ctx);
+  }
+
   // First contact: greet + recognise returning guests by phone.
   if (!state.greeted) {
     state.greeted = true;
@@ -160,15 +170,31 @@ export function agentReply(
 
   if (state.step === 'await_confirm') {
     if (isAffirmative(t)) return finalize(state, ctx, replies);
-    if (isNegative(t)) {
+
+    // Let the guest tweak the booking in one line ("actually make it 9pm",
+    // "can we do 6 people instead") rather than forcing a strict yes/no.
+    const newDate = parseDate(t);
+    const newTime = parseTime(t);
+    const newParty = parsePartySize(stripTimeTokens(t));
+    if (newDate || newTime || newParty) {
+      if (newParty) state.guests = newParty;
+      if (newDate) state.date = newDate;
+      if (newTime) state.time = newTime;
+      // Re-resolve a table for the updated details and re-summarise below.
+      state.step = 'collecting';
+      state.tableId = null;
+      state.tableNumber = null;
+      state.expect = null;
+    } else if (isNegative(t)) {
       state.step = 'collecting';
       state.time = null;
       state.expect = 'datetime';
       replies.push('Sure — what day and time would you prefer instead?');
       return { state, replies };
+    } else {
+      replies.push('Reply YES to confirm the booking, or NO to change the time.');
+      return { state, replies };
     }
-    replies.push('Reply YES to confirm the booking, or NO to change the time.');
-    return { state, replies };
   }
 
   // If we asked for an arrival time (after an "ASAP"), interpret this reply as
@@ -308,4 +334,4 @@ function finalize(
   state.reservationId = result.reservation.id;
   replies.push(confirmationMessage(result.reservation, ctx.settings.branding));
   return { state, replies };
-}
+}

@@ -24,15 +24,25 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
       {/* Sidebar */}
       <aside className="border-b border-stone-200 bg-white lg:flex lg:w-64 lg:shrink-0 lg:flex-col lg:border-b-0 lg:border-r">
         <div className="flex items-center gap-3 px-4 py-4">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-600 text-base font-bold text-white shadow-soft">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-600 text-base font-bold text-white shadow-soft">
             {branding?.logoText ?? 'CS'}
           </span>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-bold text-stone-900">
               {branding?.restaurantName ?? 'TableKit'}
             </p>
             <p className="text-xs text-stone-400">Manager console</p>
           </div>
+          {/* On mobile the footer controls are hidden, so surface Sign out here. */}
+          <button
+            onClick={async () => {
+              await fetch('/api/manager/logout', { method: 'POST' });
+              window.location.assign('/login');
+            }}
+            className="shrink-0 rounded-xl border border-stone-200 px-3 py-1.5 text-xs font-semibold text-stone-500 hover:bg-stone-50 lg:hidden"
+          >
+            Sign out
+          </button>
         </div>
 
         <nav className="flex gap-1.5 overflow-x-auto px-2 pb-2 lg:flex-1 lg:flex-col lg:overflow-visible lg:px-3 lg:pb-0">
@@ -88,4 +98,4 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
       </main>
     </div>
   );
-}
+}
